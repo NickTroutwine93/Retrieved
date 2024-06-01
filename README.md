@@ -1,4 +1,4 @@
-https://nicktroutwine93.github.io/CO-ELK-Data/
+Will be replaced when generated: https://nicktroutwine93.github.io/CO-ELK-Data/
 
 
 <strong>Note To Self</strong>
