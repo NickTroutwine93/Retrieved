@@ -7,9 +7,9 @@ import Avatar from '@mui/material/Avatar';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import logo from "./900dfdfe3610cf5e77403d64ae15264c.png";
+//import logo from "./assets/mapApprox.jpg";
 import "./App.css";
-import loadAccount from "./client/components/loadAccount.js";
+import LoadAccount from "./client/components/loadAccount.js";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -38,7 +38,7 @@ const firebaseConfig = {
 const app1 = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app1);
 const db = getFirestore(app1); 
-
+let initialUserCall = false;
 function App() {
 	//data that will be injected as table from response
 	//#number of records will get updated with response as well
@@ -52,64 +52,60 @@ function App() {
 	const handleChange = (event, newValue) => {
 	  setValue(newValue);
 	};
-	GetData()
+	if(!initialUserCall){
+		GetData()
+	}
 	async function GetData(){
 		
 		let q = query(collection(db, "accounts"), where("Email", "==", "test@gmail.com"));
 		const querySnapshot = await getDocs(q);
 		//console.log(querySnapshot);
 		querySnapshot.forEach((doc) => {
-			console.log("Document data:");
 		  // doc.data() is never undefined for query doc snapshots
 		  let userData = doc.data();
+		  console.log("Document data:",userData);
+		  if(userData){
+			initialUserCall = true
+		  }
 		  //console.log("dataCall",dataCall);
 		  //console.log(dataCall.totalHarvest,harvestInt); 
-			setProfile(loadAccount(userData));
+			setProfile(LoadAccount(userData));
 			//setProfile(profileData);
 			setFirstName(userData.FirstName);
 			setInitials("NT");
 		});
-
-
-
-
- 
 	};
- 
 
-	
-return (
-    <div className="app">
-     	<header className="app-header">
-			<div className="header-text">Retrieved</div>
-			<div  className="avatar"><Avatar sx={{ bgcolor: 'darkGreen' }}>{initials}</Avatar></div>
-			
-		</header>
-      	<div className="app-body">
-			<Box sx={{ width: '100%', typography: 'body1' }}>
-				<TabContext value={value}>
-					<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-					<TabList onChange={handleChange} aria-label="lab API tabs example">
-						<Tab label="Item One" value="1" />
-						<Tab label="Item Two" value="2" />
-						<Tab label="Item Three" value="3" />
-					</TabList>
-					</Box>
-					<TabPanel value="1">
-						Hello, {firstName}
-						
-						<div className="profile">{profile}</div>
+	return (
+		<div className="app">
+			<header className="app-header">
+				<div className="header-text">Retrieved</div>
+				<div  className="avatar"><Avatar sx={{ bgcolor: 'darkGreen' }}>{initials}</Avatar></div>
+				
+			</header>
+			<div className="app-body">
+				<Box sx={{ width: '100%', typography: 'body1' }}>
+					<TabContext value={value}>
+						<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+						<TabList onChange={handleChange} aria-label="lab API tabs example">
+							<Tab label="Item One" value="1" />
+							<Tab label="Item Two" value="2" />
+							<Tab label="Item Three" value="3" />
+						</TabList>
+						</Box>
+						<TabPanel value="1">
+							Hello, {firstName}
+							
+							<div className="profile">{profile}</div>
 
-					</TabPanel>
-					<TabPanel value="2">Item Two</TabPanel>
-					<TabPanel value="3">Item Three</TabPanel>
-				</TabContext>
-			</Box>
-
-
-      	</div>
-    </div>
-  );
-}
+						</TabPanel>
+						<TabPanel value="2">Item Two</TabPanel>
+						<TabPanel value="3">Item Three</TabPanel>
+					</TabContext>
+				</Box>
+			</div>
+		</div>
+	);
+	}
 
 export default App;

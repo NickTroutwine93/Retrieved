@@ -34,10 +34,7 @@ export default function HandleLogin(accountData) {
     const app1 = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app1);
     const db = getFirestore(app1); 
-    const [results, setResults] = React.useState("NT");
     const [firstName, setFirstName] = React.useState("Unknown");
-    const [initials, setInitials] = React.useState("US");
-    //Variables that will be paramaters for get request. Value is set by input fields;
     const [profile, setProfile] = React.useState(null);
     const [value, setValue] = React.useState('1');
     const handleChange = (event, newValue) => {
