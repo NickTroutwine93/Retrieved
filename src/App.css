@@ -4,6 +4,7 @@ body{
 .app {
   max-width: 500px;
   margin: auto;
+  border: 1px solid black;
 }
 
 .app-logo {
@@ -38,6 +39,50 @@ body{
   position: relative;
   margin: 5px 5px 0px 0px;
 }
+.profile{
+  
+  border: 1px solid darkgray;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.petTile{
+  border: 1px solid darkgray;
+  padding: 10px;
+  background-color: lightgray;
+}
+.petName{
+  margin: 0px;
+}
+.editBtnContainer{
+  text-align: right;
+}
+.editBtn:hover{
+  cursor: pointer;
+}
+.createSearchContainer,.addRemovePetContainer{
+  text-align: center;
+}
+.addRemovePetContainer{
+  margin-top: 10px;
+}
+
+.createSearch:hover{ 
+    cursor: pointer;
+  }
+  .searchTile:hover{
+    cursor: pointer;
+  }
+  .closeSearch{
+    font-size: 20px;
+  }
+  .closeSearch:hover{
+    cursor: pointer;
+  }
+  #BackArrow{
+    width: 40px;
+    height: 20px;
+  }
 @media screen and (max-width: 550px) {
     .data-table.data-points .sliders{
       display:flex;
