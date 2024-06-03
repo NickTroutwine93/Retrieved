@@ -19,7 +19,7 @@ import OpenSearchInstnace from "./client/components/openSearchInstance.js";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import { collection, doc, addDoc, getDocs, getDoc, query, where, orderBy  } from "firebase/firestore";
+import { collection, doc, addDoc, getDocs, getDoc, query, where, orderBy, GeoPoint, Timestamp  } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -43,6 +43,8 @@ const firebaseConfig = {
 const app1 = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app1);
 const db = getFirestore(app1); 
+let addUser = true; 
+
 let initialUserCall = false;
 function App() {
 	const [firstName, setFirstName] = React.useState("Unknown");
@@ -51,12 +53,13 @@ function App() {
 	const [yourPets, setYourPets] = React.useState(null);
 	const [value, setValue] = React.useState('1');
 	const [userID, setuserID] = React.useState(null);
-	const [radius, setRadius] = React.useState(null);
+	const [userRadius, setUserRadius] = React.useState(null);
 	const [search, setSearch] = React.useState(null);
 	const [homeView, setHomeView] = React.useState("block");
 	const [searchView, setsearchView] = React.useState("none");
 	const [searches, setSearches] = React.useState(null);
 	const [petTile, setPetTile] = React.useState(null);
+	const [userObject, setUserObject] = React.useState(null);
 
 	
 
@@ -77,19 +80,90 @@ function App() {
 	if(!initialUserCall){
 		GetUserData()
 	}
+	if(addUser){
+		addUser = false;
+		//AddUserData()
+		//AddPetData()
+		//AddSearchData()
+	}
+	async function AddUserData(){ 
+		try { 
+			const docRef = await addDoc(collection(db, "accounts"), {
+				AuthenticationAgent: "Google",
+				Email: "bs@gmail.com",
+				FirstName: "Baily",
+				LastName: "Sully",
+				Password: "wefsafdsdf",
+				PetID: [''],
+				ActiveSearches: [''],
+				Location: new GeoPoint(22,63),
+				Radius: 5,
+				SearchHistory: [''],
+				YourSearches: ['']
+			})
+			console.log("success")
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		  } 
+
+	}
+	async function AddPetData(){ 
+		try { 
+			const docRef = await addDoc(collection(db, "pets"), {
+				Age: 1,
+				Breed: "Husky",
+				Color: ['Bicolor','Black', 'White'],
+				Created: new Timestamp(1713143453, 875730524),
+				Image: "media/Duke.jpg",
+				Location: new GeoPoint(22.40338, 63.17403),
+				Missing: false,
+				Name: "Duke",
+				OwnerID: "HuUV748iSEwFeK7FKF3T",
+				Removed: new Timestamp(1858942654, 392800532),
+				Size: "Medium",
+				Type: "Dog",
+				SearchID: ""
+			})
+			console.log("success")
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		  } 
+
+	}
+	async function AddSearchData(){ 
+		try { 
+			const docRef = await addDoc(collection(db, "searches"), {
+				created: new Timestamp(1858942654, 392800532),
+				ended: new Timestamp(1858943654, 392801532),
+				lastUpdated: new Timestamp(1858943654, 392801532),
+				owner: "1qeEn5OTJTPCn1EmGMEe",
+				petID: "4QjFkJ01ScbF5Y8km6ao",
+				searchers: ["{'id': '1234', 'active': 'false', 'lastLocation': … '1:23 4/22/2024', :'timeLeft': '3:44 4/22/2024'}"],
+				searchersID: ['1qeEn5OTJTPCn1EmGMEe','SUKQGfhw9tkeih3cTLew'],
+				status: "deactived",
+				waypoints: ["{'id':'5432','type': '2','location':''[50° N, 12° E]'}"]
+			})
+			console.log("success")
+		} catch (e) {
+			console.error("Error adding document: ", e);
+		  } 
+
+	}
 	async function GetUserData(){
 		
 		let q = query(collection(db, "accounts"), where("Email", "==", "test@gmail.com"));
 		const querySnapshot = await getDocs(q); 
 		querySnapshot.forEach((doc) => { 
-		  let userData = doc.data();
-		  setuserID(doc.id);
-		  if(userData){
-			initialUserCall = true
-		  } 
+			let userData = doc.data();
+			setUserObject(userData);
+			//console.log(userData);
+			setuserID(doc.id);
+			if(userData){
+				initialUserCall = true
+			} 
 			setProfile(LoadAccount(userData)); 
 			setFirstName(userData.FirstName);
-			setRadius(userData.radius);
+			setUserRadius(userData.Radius);
 			setInitials("NT")
 			GetUserPetData(doc.id, 0)
 			GetYourSearchesData(doc.id, true)
@@ -103,20 +177,26 @@ function App() {
 			q = query(collection(db, "pets"), where("searchID", "==", lookupID))
 		};
 		const querySnapshot = await getDocs(q); 
+		let petsArray = [];
 		querySnapshot.forEach((doc) => { 
-		  let userPetData = doc.data();
-		  let petID = doc.id;
-		  userPetData.PetID = petID;
-		  if(yourPet == 0){
-			setYourPets(CreateUserPetTile(userPetData)); 
-		  }
-		  if(yourPet == 1){
-			setSearches(CreateYourSearchesTile(userPetData,lookupID,openSearch)); 
-		  };
-		  if(yourPet == 2){
-			setPetTile(CreateYourSearchesTile(userPetData,lookupID, false)); 
-		  };
+			let userPetData = doc.data();
+			console.log(userPetData);
+			let petID = doc.id;
+			userPetData.PetID = petID;
+			petsArray.push(userPetData);
 		});
+		if(yourPet == 0){
+		  	const yourPetTiles0 = petsArray.map(pet => <div>{CreateUserPetTile(pet)}</div>)
+		  	setYourPets(yourPetTiles0)
+		}
+		if(yourPet == 1){
+			const yourPetTiles1 = petsArray.map(pet => <div>{CreateYourSearchesTile(pet,lookupID,openSearch)}</div>)
+			setSearches(yourPetTiles1) 
+		};
+		if(yourPet == 2){ 
+			const yourPetTiles1 = petsArray.map(pet => <div>{CreateYourSearchesTile(pet,lookupID,false)}</div>)
+			setPetTile(yourPetTiles1) 
+		};
 	};
 	async function GetYourSearchesData(lookupID, yourSearch){
 		let q;
@@ -125,18 +205,26 @@ function App() {
 		}else{ 
 			q = query(collection(db, "searches"), where('__name__', '==', lookupID))
 		};
+		let searchesArray = [];
 		const querySnapshot = await getDocs(q); 
 		querySnapshot.forEach((doc) => { 
-		  let yourSearchesData = doc.data();
-		  let searchID = doc.id;
-		  let petID = yourSearchesData.petID;
-		  if(yourSearch){
-			GetUserPetData(doc.id, 1)
-		  }else{
-			GetUserPetData(doc.id, 2);
-			setSearch(OpenSearchInstnace(yourSearchesData));
-		  };
-		});
+			let yourSearchesData = doc.data();
+			let yourSearchesID = doc.id;
+			let searchOb = {
+				id: yourSearchesID,
+				data: yourSearchesData
+			}
+			searchesArray.push(searchOb);
+			console.log(yourSearchesData)
+			//let searchID = doc.id;
+			//let petID = yourSearchesData.petID;
+		});;
+		if(yourSearch){
+			console.log(searchesArray);
+			searchesArray.map(search => {console.log(search.id);GetUserPetData(search.id, 1)})
+		}else{
+			setSearch(OpenSearchInstnace(searchesArray[0].data));
+		};
 	};
 
 	return (
