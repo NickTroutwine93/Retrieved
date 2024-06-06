@@ -20,3 +20,9 @@ let App = function Gallery() {
   return <div>{listItems}</div>;
 
 }
+
+
+Dependencies to explore:
+Venmo Business Integration
+Google maps 
+https://elixir.com/ for messaging 
