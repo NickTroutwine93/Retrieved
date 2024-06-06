@@ -22,7 +22,8 @@ let App = function Gallery() {
 }
 
 
-Dependencies to explore:
-Venmo Business Integration
-Google maps 
-https://elixir.com/ for messaging 
+Dependencies to explore:<br>
+Venmo Business Integration<br>
+Google maps <br>
+https://elixir.com/ for messaging or firebase or twilo or socket.io(Better for production maybe?)
+https://www.reddit.com/r/reactnative/comments/134f7gp/whats_the_easiest_way_to_implement_a_chat_system/
