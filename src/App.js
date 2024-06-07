@@ -26,16 +26,17 @@ import { collection, doc, addDoc, getDocs, getDoc, query, where, orderBy, GeoPoi
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
-  
+
 const firebaseConfig = {
-	apiKey: "AIzaSyAjtIN4NkuEMar_SVOrx8fH9EaTYqGnKjs",
-	authDomain: "retrieved-9e01b.firebaseapp.com",
-	projectId: "retrieved-9e01b",
-	storageBucket: "retrieved-9e01b.appspot.com",
-	messagingSenderId: "949420666249",
-	appId: "1:949420666249:web:94048a53df35a9c5610558",
-	measurementId: "G-E1N41SQQ46"
-};
+	apiKey: process.env.REACT_APP_FB_API_KEY,
+	authDomain: process.env.REACT_APP_FB_DOMAIN,
+	projectId: process.env.REACT_APP_FB_PROJID,
+	storageBucket: process.env.REACT_APP_FB_STORAGE_BUCKEY,
+	messagingSenderId: process.env.REACT_APP_FB_MSGSENDERID,
+	appId: process.env.REACT_APP_FB_APPID,
+	measurementId: process.env.REACT_APP_FB_MEASUREMENTID
+}; 
+
 console.log(process.env);
 
    
