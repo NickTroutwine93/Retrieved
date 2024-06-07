@@ -14,7 +14,6 @@ import CreateUserPetTile from "./client/components/getUserPets.js";
 import CreateYourSearchesTile from "./client/components/yourSearches.js";
 import OpenSearchInstnace from "./client/components/openSearchInstance.js";
 
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -37,7 +36,8 @@ const firebaseConfig = {
 	appId: "1:949420666249:web:94048a53df35a9c5610558",
 	measurementId: "G-E1N41SQQ46"
 };
-   
+console.log(process.env);
+
    
 // Initialize Firebase
 const app1 = initializeApp(firebaseConfig);

@@ -26,3 +26,4 @@ app.listen(PORT, () => {
 });
 */
 // Import the functions you need from the SDKs
+//console.log(process.env);
