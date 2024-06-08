@@ -27,7 +27,7 @@ export default function CreateUserPetTile(petInfo) {
                     </Grid>
                 </Grid>
                 <div className="createSearchContainer">
-                    <button className="createSearch" data-petid={petInfo.PetID} data-ownerid={petInfo.OwnerID}>Create Search</button>
+                    <button className="createSearch primaryButton" data-petid={petInfo.PetID} data-ownerid={petInfo.OwnerID}>Create Search</button>
                 </div>
             </Box>
         </div>
