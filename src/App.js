@@ -13,29 +13,36 @@ import LoadAccount from "./client/components/loadAccount.js";
 import CreateUserPetTile from "./client/components/getUserPets.js";
 import CreateYourSearchesTile from "./client/components/yourSearches.js";
 import OpenSearchInstnace from "./client/components/openSearchInstance.js";
-
+import Map  from "./client/components/generateSearchMap.js";
+import { LoadScript } from "@react-google-maps/api";
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { collection, doc, addDoc, getDocs, getDoc, query, where, orderBy, GeoPoint, Timestamp  } from "firebase/firestore";
+import {
+  GoogleMap,
+  StandaloneSearchBox,
+  DirectionsRenderer
+} from "@react-google-maps/api";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+console.log(process.env);
 
-  
 const firebaseConfig = {
-	apiKey: "AIzaSyAjtIN4NkuEMar_SVOrx8fH9EaTYqGnKjs",
-	authDomain: "retrieved-9e01b.firebaseapp.com",
-	projectId: "retrieved-9e01b",
-	storageBucket: "retrieved-9e01b.appspot.com",
-	messagingSenderId: "949420666249",
-	appId: "1:949420666249:web:94048a53df35a9c5610558",
-	measurementId: "G-E1N41SQQ46"
-};
+	apiKey: process.env.REACT_APP_FB_API_KEY,
+	authDomain: process.env.REACT_APP_FB_DOMAIN,
+	projectId: process.env.REACT_APP_FB_PROJID,
+	storageBucket: process.env.REACT_APP_FB_STORAGE_BUCKEY,
+	messagingSenderId: process.env.REACT_APP_FB_MSGSENDERID,
+	appId: process.env.REACT_APP_FB_APPID,
+	measurementId: process.env.REACT_APP_FB_MEASUREMENTID
+}; 
+
 console.log(process.env);
 
    
@@ -60,6 +67,8 @@ function App() {
 	const [searches, setSearches] = React.useState(null);
 	const [petTile, setPetTile] = React.useState(null);
 	const [userObject, setUserObject] = React.useState(null);
+	const [searchMap, setSearchMap] = React.useState(null);
+	const lib = ["places"];
 
 	
 
@@ -226,12 +235,11 @@ function App() {
 			setSearch(OpenSearchInstnace(searchesArray[0].data));
 		};
 	};
-
 	return (
 		<div className="app">
 			<header className="app-header">
 				<div className="header-text">Retrieved</div>
-				<div  className="avatar"><Avatar sx={{ bgcolor: 'darkGreen' }}>{initials}</Avatar></div>
+				<div  className="avatar"><Avatar sx={{ bgcolor: 'darkBlue' }}>{initials}</Avatar></div>
 				
 			</header>
 			<div className="app-body">
@@ -266,6 +274,9 @@ function App() {
 					<div className="closeSearch" onClick={closeSearch} style={{width: "100px",height: "50px"}}><img src={backArrow} id="BackArrow"/>  Back</div>
 					<div className="Search">
 						{petTile}
+						<LoadScript googleMapsApiKey={process.env.REACT_APP_GM_API_KEY} libraries={lib}>
+							<Map />
+						</LoadScript>
 						{search}
 					</div>
 				</Box>
