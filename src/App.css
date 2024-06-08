@@ -49,7 +49,7 @@ body{
 .petTile{
   border: 1px solid #4d4545;
   padding: 10px;
-  background-color: #a9bfc5;
+  background-color: #d6e7eb;
   border-radius: 10px;
   margin: 10px 0px;
   box-shadow: 2px 3px 4px #71868d;
@@ -85,6 +85,63 @@ body{
   #BackArrow{
     width: 40px;
     height: 20px;
+  }
+  .primaryButton {
+    box-shadow: 0px 10px 14px -7px #15393f;
+    background-color:#2f5665;
+    border-radius:8px;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:16px;
+    font-weight:bold;
+    padding:8px 22px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #3d768a;
+  }
+  .primaryButton:hover {
+    background-color:#408c99;
+  }
+  .primaryButton:active {
+    position:relative;
+    top:1px;
+  }
+  .editBtn{
+    background: #0fe50f;
+    color: white;
+    border: 2px solid #0bad0b;
+    padding: 0px 15px;
+  }
+  .editBtn:hover {
+    background-color:#11f711;
+  }
+  .editBtn:active {
+    position:relative;
+    top:1px;
+  }
+  .addRemovePet{
+    box-shadow: 0px 10px 14px -7px #15393f;
+    background-color: #999696;
+    border-color: gainsboro;
+    width: 50%;
+    border-radius: 8px;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 22px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #333333;
+  }
+  .addRemovePet:hover {
+    background-color:#aaa8a8;
+  }
+  .addRemovePet:active {
+    position:relative;
+    top:1px;
   }
 @media screen and (max-width: 550px) {
     .data-table.data-points .sliders{

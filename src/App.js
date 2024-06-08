@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import Modal from '@mui/material/Modal';
 import backArrow from "./assets/back-arrow.png";
 import "./App.css";
 import LoadAccount from "./client/components/loadAccount.js";
@@ -20,18 +21,6 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { collection, doc, addDoc, getDocs, getDoc, query, where, orderBy, GeoPoint, Timestamp  } from "firebase/firestore";
-import {
-  GoogleMap,
-  StandaloneSearchBox,
-  DirectionsRenderer
-} from "@react-google-maps/api";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-console.log(process.env);
 
 const firebaseConfig = {
 	apiKey: process.env.REACT_APP_FB_API_KEY,
@@ -43,7 +32,6 @@ const firebaseConfig = {
 	measurementId: process.env.REACT_APP_FB_MEASUREMENTID
 }; 
 
-console.log(process.env);
 
    
 // Initialize Firebase
@@ -69,9 +57,20 @@ function App() {
 	const [userObject, setUserObject] = React.useState(null);
 	const [searchMap, setSearchMap] = React.useState(null);
 	const lib = ["places"];
-
-	
-
+	const [open, setOpen] = React.useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+	const style = {
+		position: 'absolute',
+		top: '20%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: 400,
+		bgcolor: 'background.paper',
+		border: '2px solid #000',
+		boxShadow: 24,
+		p: 4,
+	  };
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
@@ -157,7 +156,8 @@ function App() {
 			console.error("Error adding document: ", e);
 		  } 
 
-	}
+	};
+
 	async function GetUserData(){
 		
 		let q = query(collection(db, "accounts"), where("Email", "==", "test@gmail.com"));
@@ -178,6 +178,7 @@ function App() {
 			GetYourSearchesData(doc.id, true)
 		});
 	};
+
 	async function GetUserPetData(lookupID, yourPet){
 		let q;
 		if(yourPet == 0){
@@ -207,6 +208,7 @@ function App() {
 			setPetTile(yourPetTiles1) 
 		};
 	};
+
 	async function GetYourSearchesData(lookupID, yourSearch){
 		let q;
 		if(yourSearch){
@@ -214,6 +216,7 @@ function App() {
 		}else{ 
 			q = query(collection(db, "searches"), where('__name__', '==', lookupID))
 		};
+
 		let searchesArray = [];
 		const querySnapshot = await getDocs(q); 
 		querySnapshot.forEach((doc) => { 
@@ -225,9 +228,8 @@ function App() {
 			}
 			searchesArray.push(searchOb);
 			console.log(yourSearchesData)
-			//let searchID = doc.id;
-			//let petID = yourSearchesData.petID;
 		});;
+
 		if(yourSearch){
 			console.log(searchesArray);
 			searchesArray.map(search => {console.log(search.id);GetUserPetData(search.id, 1)})
@@ -263,12 +265,22 @@ function App() {
 							</div>
 							<div className="petCards">{yourPets}</div>
 							<div className="addRemovePetContainer">
-								<button className="addRemovePet" data-userid={userID}>Add/Remove Pets</button>
+								<button className="addRemovePet" data-userid={userID} onClick={handleOpen}>Add/Remove Pets</button>
 							</div> 
 						</TabPanel>
 						<TabPanel value="2">{searches}</TabPanel>
 						<TabPanel value="3">Item Three</TabPanel>
-					</TabContext>
+					</TabContext> 
+					<Modal
+						open={open}
+						onClose={handleClose}
+						aria-labelledby="modal-modal-title"
+						aria-describedby="modal-modal-description"
+						>
+						<Box sx={style}>
+							<p>This is a test modal</p>
+						</Box>
+					</Modal>
 				</Box>
 				<Box  style={{display: searchView}}  id="Search">
 					<div className="closeSearch" onClick={closeSearch} style={{width: "100px",height: "50px"}}><img src={backArrow} id="BackArrow"/>  Back</div>
@@ -283,6 +295,6 @@ function App() {
 			</div>
 		</div>
 	);
-	}
+}
 
 export default App;
