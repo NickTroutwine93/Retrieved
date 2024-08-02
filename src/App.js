@@ -81,7 +81,6 @@ function App() {
 		GetYourSearchesData(searchToOpen, false)
 	};
 	const closeSearch = (event) => {
-		console.log(event); 
 		setsearchView("none");
 		setHomeView("block");  
 	};
@@ -165,7 +164,6 @@ function App() {
 		querySnapshot.forEach((doc) => { 
 			let userData = doc.data();
 			setUserObject(userData);
-			//console.log(userData);
 			setuserID(doc.id);
 			if(userData){
 				initialUserCall = true
@@ -184,7 +182,7 @@ function App() {
 		if(yourPet == 0){
 			q = query(collection(db, "pets"), where("OwnerID", "==", lookupID))
 		}else{
-			q = query(collection(db, "pets"), where("searchID", "==", lookupID))
+			q = query(collection(db, "pets"), where("searchID", "in", lookupID))
 		};
 		const querySnapshot = await getDocs(q); 
 		let petsArray = [];
@@ -227,12 +225,13 @@ function App() {
 				data: yourSearchesData
 			}
 			searchesArray.push(searchOb);
-			console.log(yourSearchesData)
 		});;
 
 		if(yourSearch){
 			console.log(searchesArray);
-			searchesArray.map(search => {console.log(search.id);GetUserPetData(search.id, 1)})
+			let searchIDs = [];
+			searchesArray.map(search => {searchIDs.push(search.id)})
+			GetUserPetData(searchIDs, 1) 
 		}else{
 			setSearch(OpenSearchInstnace(searchesArray[0].data));
 		};
